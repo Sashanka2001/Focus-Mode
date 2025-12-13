@@ -25,29 +25,40 @@ export default function FocusSession() {
   };
 
   return (
-    <div className="p-4 space-y-4 bg-white shadow rounded">
-      <p className="text-gray-700">Session: {sessionActive ? "Active" : "Stopped"}</p>
-      <div className="space-x-2">
+    <div className="space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-medium text-slate-600">
+          Session status
+        </p>
+        <span
+          className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${sessionActive ? "bg-success/15 text-success" : "bg-slate-200 text-slate-600"}`}
+        >
+          {sessionActive ? "Active" : "Stopped"}
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-3">
         <button
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          className="rounded-full bg-success px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-success-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-success"
           onClick={startSession}
         >
           Start Session
         </button>
         <button
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          className="rounded-full bg-danger px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-danger-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger"
           onClick={stopSession}
         >
           Stop Session
         </button>
         <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           onClick={simulateTabSwitch}
         >
           Simulate Tab Switch
         </button>
       </div>
-      <p className="text-gray-700">Tab switches detected: {switchCount}</p>
+      <p className="text-sm text-slate-600">
+        Tab switches detected: <span className="font-semibold text-brand-light">{switchCount}</span>
+      </p>
     </div>
   );
 }

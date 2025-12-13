@@ -5,12 +5,12 @@ import SiteList from "./components/SiteList";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 p-4 flex flex-col items-center">
+    <div className="flex min-h-screen flex-col bg-slate-100">
       <Header />
-      <div className="mt-6 w-full max-w-md space-y-4">
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center gap-6 px-4 py-10">
         <FocusSession />
         <SiteList />
-      </div>
+      </main>
     </div>
   );
 }
