@@ -1,16 +1,18 @@
 import React from "react";
 import Header from "./components/Header";
 import FocusSession from "./components/FocusSession";
+import AmbientSoundPanel from "./components/AmbientSoundPanel";
 import SiteList from "./components/SiteList";
 
 function App() {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-100">
+    <div className="flex min-h-screen flex-col items-center bg-gray-100 p-4">
       <Header />
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center gap-6 px-4 py-10">
+      <div className="mt-6 w-full max-w-2xl space-y-4">
         <FocusSession />
+        <AmbientSoundPanel />
         <SiteList />
-      </main>
+      </div>
     </div>
   );
 }
