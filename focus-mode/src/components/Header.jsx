@@ -17,9 +17,14 @@ export default function Header() {
         <p className="text-sm text-white/80">
           Launch focus sessions, block distractions, and track tab switches in one place.
         </p>
-        <span className="mt-2 inline-block rounded bg-white/10 px-3 py-1 text-xs font-mono">
-          Screen time: {hours > 0 ? `${hours}h ` : ""}{minutes > 0 ? `${minutes}m ` : ""}{seconds}s
-        </span>
+        <div className="mt-4 flex flex-col items-center">
+          <span className="text-lg font-bold tracking-wide bg-white/20 rounded px-4 py-2 text-brand-dark shadow">
+            Screen Time
+          </span>
+          <span className="mt-2 text-3xl font-mono font-bold bg-white/20 rounded px-6 py-2 text-brand-dark shadow">
+            {hours > 0 ? `${hours}h ` : ""}{minutes > 0 ? `${minutes}m ` : ""}{seconds}s
+          </span>
+        </div>
       </div>
     </header>
   );
