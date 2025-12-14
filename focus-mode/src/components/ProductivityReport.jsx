@@ -88,7 +88,9 @@ export default function ProductivityReport() {
           </button>
         </div>
       </header>
-      <Bar data={data} options={{ responsive: true, plugins: { legend: { position: "top" } } }} />
+      <div className="text-left">
+        <Bar data={data} options={{ responsive: true, plugins: { legend: { position: "top" } } }} />
+      </div>
     </section>
   );
 }

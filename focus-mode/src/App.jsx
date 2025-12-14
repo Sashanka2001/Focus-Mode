@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Header from "./components/Header";
-import FocusSession from "./components/FocusSession";
-import AmbientSoundPanel from "./components/AmbientSoundPanel";
-
-import ProductivityReport from "./components/ProductivityReport";
+import { Routes, Route } from 'react-router-dom';
+import Sidebar from "./components/Sidebar";
+import FocusSessionPage from "./components/FocusSessionPage";
+import AmbientSoundPage from "./components/AmbientSoundPage";
+import BlockedSitesPage from "./components/BlockedSitesPage";
+import ProductivityReportPage from "./components/ProductivityReportPage";
 
 function App() {
   const [dark, setDark] = useState(() => {
@@ -20,13 +21,29 @@ function App() {
   }, [dark]);
 
   return (
-    <div className={"flex min-h-screen flex-col items-center p-4 " + (dark ? "bg-gray-900" : "bg-gray-100") + " dark:bg-gray-900"}>
-      <Header dark={dark} setDark={setDark} />
-      <div className="mt-6 w-full max-w-2xl space-y-4">
-        <FocusSession />
-        <AmbientSoundPanel />
-        <SiteList />
-        <ProductivityReport />
+    <div className={`flex min-h-screen ${dark ? "bg-gray-900" : "bg-gray-100"}`}>
+      <Sidebar dark={dark} />
+      <div className="flex-1 pl-64">
+        <div className="p-4">
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={() => setDark(!dark)}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
+                dark
+                  ? "bg-gray-700 text-white hover:bg-gray-600"
+                  : "bg-white text-gray-900 hover:bg-gray-50"
+              } shadow-md`}
+            >
+              {dark ? "☀️ Light" : "🌙 Dark"}
+            </button>
+          </div>
+          <Routes>
+            <Route path="/" element={<FocusSessionPage />} />
+            <Route path="/ambient-sound" element={<AmbientSoundPage />} />
+            <Route path="/blocked-sites" element={<BlockedSitesPage />} />
+            <Route path="/productivity-report" element={<ProductivityReportPage />} />
+          </Routes>
+        </div>
       </div>
     </div>
   );
