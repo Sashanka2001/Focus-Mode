@@ -11,5 +11,3 @@ const AmbientSoundPage = () => {
 };
 
 export default AmbientSoundPage;
-
-export default AmbientSoundPage;
