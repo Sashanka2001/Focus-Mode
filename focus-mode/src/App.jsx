@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import FocusSession from "./components/FocusSession";
 import AmbientSoundPanel from "./components/AmbientSoundPanel";
-import SiteList from "./components/SiteList";
+
+import ProductivityReport from "./components/ProductivityReport";
 
 function App() {
   const [dark, setDark] = useState(() => {
@@ -25,6 +26,7 @@ function App() {
         <FocusSession />
         <AmbientSoundPanel />
         <SiteList />
+        <ProductivityReport />
       </div>
     </div>
   );
