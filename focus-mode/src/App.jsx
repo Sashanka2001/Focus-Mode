@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Sidebar from "./components/Sidebar";
 import FocusSessionPage from "./components/FocusSessionPage";
 import AmbientSoundPage from "./components/AmbientSoundPage";
