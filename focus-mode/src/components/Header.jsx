@@ -1,4 +1,6 @@
 
+export default Header;
+
 import React from "react";
 import useScreenTime from "../hooks/useScreenTime";
 
