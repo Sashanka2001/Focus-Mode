@@ -11,5 +11,3 @@ const FocusSessionPage = () => {
 };
 
 export default FocusSessionPage;
-
-export default FocusSessionPage;
