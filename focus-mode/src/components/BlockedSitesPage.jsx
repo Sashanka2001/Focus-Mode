@@ -11,5 +11,3 @@ const BlockedSitesPage = () => {
 };
 
 export default BlockedSitesPage;
-
-export default BlockedSitesPage;
