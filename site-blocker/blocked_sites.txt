@@ -1,0 +1,4 @@
+# Add one site per line, e.g.
+facebook.com
+youtube.com
+twitter.com
