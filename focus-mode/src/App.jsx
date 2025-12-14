@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 
 import Header from "./components/Header";
 
@@ -19,8 +20,8 @@ function App() {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("focusmode-dark", dark);
     }
-    localStorage.setItem("focusmode-dark", dark);
   }, [dark]);
 
   return (
