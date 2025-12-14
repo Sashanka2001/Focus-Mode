@@ -23,5 +23,3 @@ const ProductivityReportPage = () => {
 };
 
 export default ProductivityReportPage;
-
-export default ProductivityReportPage;
