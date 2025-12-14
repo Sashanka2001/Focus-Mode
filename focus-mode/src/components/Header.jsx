@@ -8,7 +8,7 @@ export default function Header() {
   const minutes = Math.floor((screenTime % 3600) / 60);
   const seconds = screenTime % 60;
   return (
-    <header className="w-full rounded-b-xl bg-brand text-white shadow-card dark:bg-gray-800 dark:text-slate-100">
+    <header className="w-full rounded-b-xl bg-brand text-white shadow-card dark:bg-slate-800 dark:text-slate-100">
       <div className="mx-auto flex max-w-2xl flex-col items-center gap-2 px-6 py-5 text-center">
         <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide dark:bg-slate-700/40 dark:text-slate-200">
           Stay in flow
