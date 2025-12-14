@@ -23,7 +23,7 @@ function App() {
   return (
     <div className={`flex min-h-screen ${dark ? "bg-gray-900" : "bg-gray-100"}`}>
       <Sidebar dark={dark} />
-      <div className="flex-1">
+      <div className="flex-1 pl-64">
         <div className="p-4">
           <div className="flex justify-end mb-4">
             <button

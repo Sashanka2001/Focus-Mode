@@ -2,7 +2,7 @@ import ProductivityReport from './ProductivityReport';
 
 const ProductivityReportPage = () => {
   return (
-    <div className="ml-64 p-6">
+    <div className="p-6">
       <ProductivityReport />
     </div>
   );
