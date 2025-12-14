@@ -20,15 +20,7 @@ function App() {
 
   return (
     <div className={"flex min-h-screen flex-col items-center p-4 " + (dark ? "bg-gray-900" : "bg-gray-100") + " dark:bg-gray-900"}>
-      <div className="w-full flex justify-end max-w-2xl">
-        <button
-          className="mt-4 mb-2 rounded px-3 py-1 text-xs font-semibold border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow hover:bg-slate-100 dark:hover:bg-slate-700 transition"
-          onClick={() => setDark((d) => !d)}
-        >
-          {dark ? "☀️ Light Mode" : "🌙 Dark Mode"}
-        </button>
-      </div>
-      <Header />
+      <Header dark={dark} setDark={setDark} />
       <div className="mt-6 w-full max-w-2xl space-y-4">
         <FocusSession />
         <AmbientSoundPanel />
