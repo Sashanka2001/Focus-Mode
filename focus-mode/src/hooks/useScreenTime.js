@@ -1,34 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import screentimer from "../lib/screentimer";
 
 export default function useScreenTime() {
-  const [screenTime, setScreenTime] = useState(0); // seconds
-  const intervalRef = useRef(null);
-  const lastActiveRef = useRef(Date.now());
+  const [state, setState] = useState(() => {
+    const s = screentimer.getScreenTime();
+    return { screenTime: s.screenTime || 0 };
+  });
 
   useEffect(() => {
-    function onActivity() {
-      lastActiveRef.current = Date.now();
-    }
-    window.addEventListener("mousemove", onActivity);
-    window.addEventListener("keydown", onActivity);
-    window.addEventListener("mousedown", onActivity);
-    window.addEventListener("touchstart", onActivity);
-
-    intervalRef.current = setInterval(() => {
-      // If user was active in last 60s, count as screen time
-      if (Date.now() - lastActiveRef.current < 60000) {
-        setScreenTime((t) => t + 1);
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalRef.current);
-      window.removeEventListener("mousemove", onActivity);
-      window.removeEventListener("keydown", onActivity);
-      window.removeEventListener("mousedown", onActivity);
-      window.removeEventListener("touchstart", onActivity);
-    };
+    const unsub = screentimer.subscribeScreenTime((s) => {
+      setState({ screenTime: s.screenTime || 0 });
+    });
+    return unsub;
   }, []);
 
-  return screenTime;
+  return state.screenTime;
 }
