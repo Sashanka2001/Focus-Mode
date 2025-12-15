@@ -6,6 +6,7 @@ const state = {
   screenTime: 0, // seconds
   lastActive: Date.now(),
 };
+let pendingScreenIncrement = 0; // accumulate seconds before flushing to stats
 
 function persist() {
   try {
@@ -19,16 +20,28 @@ function notify() {
 
 import stats from './stats';
 
+function flushPending() {
+  if (pendingScreenIncrement > 0) {
+    try {
+      const dateKey = new Date().toLocaleDateString();
+      stats.incrementScreenTime(dateKey, pendingScreenIncrement);
+    } catch (e) {}
+    pendingScreenIncrement = 0;
+    // persist current state when flushing
+    persist();
+  }
+}
+
 function tick() {
   try {
     if (Date.now() - state.lastActive < 60000) {
       state.screenTime = (state.screenTime || 0) + 1;
-      // also increment today's stats screenTime so report stays in sync
-      try {
-        const dateKey = new Date().toLocaleDateString();
-        stats.incrementScreenTime(dateKey, 1);
-      } catch (e) {}
-      persist();
+      pendingScreenIncrement += 1;
+      // flush once per minute to reduce localStorage churn
+      if (pendingScreenIncrement >= 60) {
+        flushPending();
+      }
+      // notify every second for live UI updates
       notify();
     }
   } catch (e) {}
