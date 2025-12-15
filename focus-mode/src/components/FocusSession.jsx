@@ -4,6 +4,7 @@ import { useFocusTimer } from "../hooks/useFocusTimer";
 import stats from "../lib/stats";
 import screentimer from "../lib/screentimer";
 import Celebration from "./Celebration";
+import ambientManager from "../lib/ambientManager";
 
 function formatTime(seconds) {
   const minutes = Math.floor(seconds / 60)
@@ -64,6 +65,13 @@ export default function FocusSession() {
     startScreenRef.current = screentimer.getScreenTime().screenTime || 0;
     startTsRef.current = Date.now();
     start(durationMinutes);
+    // start ambient sound for session
+    try {
+      if (ambientManager && ambientManager.isSupported) {
+        ambientManager.setVolume(0.35);
+        ambientManager.play('calm-melody');
+      }
+    } catch (e) {}
     setNotification(null);
   };
 
@@ -80,6 +88,12 @@ export default function FocusSession() {
       }
     } catch (e) {}
     stop();
+    // stop ambient sound when session is stopped
+    try {
+      if (ambientManager && ambientManager.isSupported) {
+        ambientManager.stop();
+      }
+    } catch (e) {}
     setNotification("Session paused. Resume when you are ready.");
   };
 
