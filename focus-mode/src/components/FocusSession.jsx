@@ -228,6 +228,12 @@ export default function FocusSession() {
       </div>
 
       {notification && <Notification message={notification} />}
+      {showCelebrate && (
+        <Celebration
+          message={"Huyeyi well done"}
+          onClose={() => setShowCelebrate(false)}
+        />
+      )}
     </div>
   );
 }
