@@ -31,6 +31,14 @@ export function incrementTabSwitch(dateKey, count = 1) {
   saveStorage(stats);
 }
 
+export function incrementScreenTime(dateKey, seconds = 1) {
+  const stats = getStorage();
+  const day = stats[dateKey] || { sessions: 0, tabSwitches: 0, screenTime: 0 };
+  day.screenTime = (day.screenTime || 0) + seconds;
+  stats[dateKey] = day;
+  saveStorage(stats);
+}
+
 export function getStats() {
   return getStorage();
 }
