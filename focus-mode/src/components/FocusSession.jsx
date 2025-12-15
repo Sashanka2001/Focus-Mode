@@ -3,6 +3,7 @@ import Notification from "./Notification";
 import { useFocusTimer } from "../hooks/useFocusTimer";
 import stats from "../lib/stats";
 import screentimer from "../lib/screentimer";
+import Celebration from "./Celebration";
 
 function formatTime(seconds) {
   const minutes = Math.floor(seconds / 60)
@@ -31,7 +32,10 @@ export default function FocusSession() {
       const dateKey = new Date().toLocaleDateString();
       stats.addSession({ dateKey, sessionSeconds, tabSwitches: switchCount, screenTimeSeconds: screenDuring });
     } catch (e) {}
+    setShowCelebrate(true);
   };
+
+  const [showCelebrate, setShowCelebrate] = useState(false);
 
   const {
     isActive: sessionActive,
