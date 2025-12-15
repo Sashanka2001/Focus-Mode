@@ -33,6 +33,9 @@ export default function ProductivityReport() {
       if (e.key === "focusmode-stats") setStats(getInitialStats());
     };
     window.addEventListener("storage", onStorage);
+    // Listen for same-tab updates dispatched by stats.js
+    const onLocalUpdate = () => setStats(getInitialStats());
+    window.addEventListener('focusmode-stats-updated', onLocalUpdate);
     return () => window.removeEventListener("storage", onStorage);
   }, []);
 

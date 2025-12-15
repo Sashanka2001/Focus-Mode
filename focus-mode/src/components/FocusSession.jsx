@@ -1,6 +1,10 @@
 import React, { useMemo, useState, useEffect } from "react";
 import Notification from "./Notification";
 import { useFocusTimer } from "../hooks/useFocusTimer";
+import stats from "../lib/stats";
+import screentimer from "../lib/screentimer";
+import Celebration from "./Celebration";
+import ambientManager from "../lib/ambientManager";
 
 function formatTime(seconds) {
   const minutes = Math.floor(seconds / 60)
@@ -16,6 +20,24 @@ export default function FocusSession() {
   const [notification, setNotification] = useState(null);
   const [switchCount, setSwitchCount] = useState(0);
   const [tabSwitchLimit, setTabSwitchLimit] = useState(5);
+  // track session start screen time and start timestamp
+  const startScreenRef = React.useRef(0);
+  const startTsRef = React.useRef(null);
+  const handleComplete = () => {
+    setNotification("Focus block complete! Take a quick stretch.");
+    // compute stats and save
+    try {
+      const endScreen = screentimer.getScreenTime().screenTime || 0;
+      const screenDuring = Math.max(0, endScreen - (startScreenRef.current || 0));
+      const sessionSeconds = (durationMinutes || 0) * 60;
+      const dateKey = new Date().toLocaleDateString();
+      stats.addSession({ dateKey, sessionSeconds, tabSwitches: switchCount, screenTimeSeconds: screenDuring });
+    } catch (e) {}
+    setShowCelebrate(true);
+  };
+
+  const [showCelebrate, setShowCelebrate] = useState(false);
+
   const {
     isActive: sessionActive,
     start,
@@ -26,12 +48,7 @@ export default function FocusSession() {
     progress,
     durationMinutes,
     setDurationMinutes,
-  } = useFocusTimer({
-    defaultMinutes: 25,
-    onComplete: () => {
-      setNotification("Focus block complete! Take a quick stretch.");
-    },
-  });
+  } = useFocusTimer({ defaultMinutes: 25, onComplete: handleComplete });
 
   useEffect(() => {
     if (!notification) {
@@ -44,12 +61,39 @@ export default function FocusSession() {
 
   const startSession = () => {
     setSwitchCount(0);
+    // snapshot screen time at start
+    startScreenRef.current = screentimer.getScreenTime().screenTime || 0;
+    startTsRef.current = Date.now();
     start(durationMinutes);
+    // start ambient sound for session
+    try {
+      if (ambientManager && ambientManager.isSupported) {
+        ambientManager.setVolume(0.35);
+        ambientManager.play('calm-melody');
+      }
+    } catch (e) {}
     setNotification(null);
   };
 
   const stopSession = () => {
+    // record partial session as a stopped snapshot (optional)
+    try {
+      const elapsed = startTsRef.current ? Math.floor((Date.now() - startTsRef.current) / 1000) : 0;
+      const screenNow = screentimer.getScreenTime().screenTime || 0;
+      const screenDuring = Math.max(0, screenNow - (startScreenRef.current || 0));
+      const dateKey = new Date().toLocaleDateString();
+      // record partial session as a session entry (counts toward report)
+      if (elapsed > 0) {
+        stats.addSession({ dateKey, sessionSeconds: elapsed, tabSwitches: switchCount, screenTimeSeconds: screenDuring });
+      }
+    } catch (e) {}
     stop();
+    // stop ambient sound when session is stopped
+    try {
+      if (ambientManager && ambientManager.isSupported) {
+        ambientManager.stop();
+      }
+    } catch (e) {}
     setNotification("Session paused. Resume when you are ready.");
   };
 
@@ -76,6 +120,11 @@ export default function FocusSession() {
       if (next >= tabSwitchLimit) {
         setNotification("Focus alert: you reached your tab switch limit.");
       }
+      // also persist increment for today's date
+      try {
+        const dateKey = new Date().toLocaleDateString();
+        stats.incrementTabSwitch(dateKey, 1);
+      } catch (e) {}
       return next;
     });
   };
@@ -193,6 +242,12 @@ export default function FocusSession() {
       </div>
 
       {notification && <Notification message={notification} />}
+      {showCelebrate && (
+        <Celebration
+          message={"Huyeyi well done"}
+          onClose={() => setShowCelebrate(false)}
+        />
+      )}
     </div>
   );
 }

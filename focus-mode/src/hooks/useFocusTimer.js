@@ -1,90 +1,49 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import timer from "../lib/timer";
 
 export function useFocusTimer({ defaultMinutes = 25, onComplete } = {}) {
-  const [isActive, setIsActive] = useState(false);
-  const [durationMinutes, setDurationMinutes] = useState(defaultMinutes);
-  const [remainingSeconds, setRemainingSeconds] = useState(defaultMinutes * 60);
-  const intervalRef = useRef(null);
-  const completeCallbackRef = useRef(onComplete);
+  const [localState, setLocalState] = useState(() => {
+    const s = timer.getTimerState();
+    return {
+      isActive: s.isActive,
+      durationMinutes: s.durationMinutes ?? defaultMinutes,
+      remainingSeconds: s.remainingSeconds ?? defaultMinutes * 60,
+    };
+  });
 
   useEffect(() => {
-    completeCallbackRef.current = onComplete;
+    // set completion callback in timer
+    timer.setOnComplete(onComplete);
   }, [onComplete]);
 
-  const clearTimer = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
+  useEffect(() => {
+    const unsub = timer.subscribeTimer((s) => {
+      setLocalState({
+        isActive: s.isActive,
+        durationMinutes: s.durationMinutes,
+        remainingSeconds: s.remainingSeconds,
+      });
+    });
+    return unsub;
   }, []);
 
-  const stop = useCallback(() => {
-    clearTimer();
-    setIsActive(false);
-  }, [clearTimer]);
+  const start = (minutes) => timer.startTimer(minutes);
+  const stop = () => timer.stopTimer();
+  const reset = (minutes) => timer.resetTimer(minutes);
+  const setDurationMinutes = (m) => timer.resetTimer(m);
 
-  const start = useCallback(
-    (minutes) => {
-      const nextMinutes = minutes ?? durationMinutes;
-      clearTimer();
-      setDurationMinutes(nextMinutes);
-      setRemainingSeconds(nextMinutes * 60);
-      setIsActive(true);
-    },
-    [clearTimer, durationMinutes],
-  );
-
-  const reset = useCallback(
-    (minutes) => {
-      const nextMinutes = minutes ?? durationMinutes;
-      clearTimer();
-      setDurationMinutes(nextMinutes);
-      setRemainingSeconds(nextMinutes * 60);
-      setIsActive(false);
-    },
-    [clearTimer, durationMinutes],
-  );
-
-  useEffect(() => {
-    if (!isActive) {
-      clearTimer();
-      return undefined;
-    }
-
-    intervalRef.current = setInterval(() => {
-      setRemainingSeconds((prev) => {
-        if (prev <= 1) {
-          clearTimer();
-          setIsActive(false);
-          if (typeof completeCallbackRef.current === "function") {
-            completeCallbackRef.current();
-          }
-          return 0;
-        }
-
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => {
-      clearTimer();
-    };
-  }, [isActive, clearTimer]);
-
-  useEffect(() => () => clearTimer(), [clearTimer]);
-
-  const totalSeconds = durationMinutes * 60;
-  const progress = totalSeconds === 0 ? 0 : (totalSeconds - remainingSeconds) / totalSeconds;
+  const totalSeconds = localState.durationMinutes * 60;
+  const progress = totalSeconds === 0 ? 0 : (totalSeconds - localState.remainingSeconds) / totalSeconds;
 
   return {
-    isActive,
+    isActive: localState.isActive,
     start,
     stop,
     reset,
-    remainingSeconds,
+    remainingSeconds: localState.remainingSeconds,
     totalSeconds,
     progress,
-    durationMinutes,
+    durationMinutes: localState.durationMinutes,
     setDurationMinutes,
   };
 }

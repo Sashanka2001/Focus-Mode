@@ -9,7 +9,8 @@ const ProductivityReportPage = () => {
   const seconds = screenTime % 60;
 
   return (
-    <div className="ml-64 p-6">
+    <div className="ml-6 p-6 flex justify-center">
+      <div className="w-full max-w-5xl">
       <h2 className="text-2xl font-bold mb-4">Productivity Report</h2>
       <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
         <h3 className="text-lg font-semibold">Screen Time</h3>
@@ -18,6 +19,7 @@ const ProductivityReportPage = () => {
         </p>
       </div>
       <ProductivityReport />
+      </div>
     </div>
   );
 };
