@@ -42,7 +42,7 @@ export default function LoginModal() {
           <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
           <div className="relative bg-white dark:bg-slate-800 rounded-lg p-6 z-60 w-full max-w-sm">
             <h3 className="font-semibold mb-3 text-slate-900 dark:text-slate-100">Owner Login</h3>
-            <p className="text-xs text-slate-500 mb-3">Enter owner password to view your personal data.</p>
+            <p className="text-xs text-slate-500 mb-3">Enter owner password to view your data.</p>
             <input
               type="password"
               value={password}
