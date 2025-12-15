@@ -10,6 +10,12 @@ function getStorage() {
 function saveStorage(obj) {
   try {
     localStorage.setItem('focusmode-stats', JSON.stringify(obj));
+    try {
+      // notify same-tab listeners that stats changed
+      if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+        window.dispatchEvent(new Event('focusmode-stats-updated'));
+      }
+    } catch (e) {}
   } catch (e) {}
 }
 
