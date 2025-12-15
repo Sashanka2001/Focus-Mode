@@ -1,6 +1,17 @@
+import auth from './auth';
+
+function getKey() {
+  try {
+    const s = auth.getState();
+    return s && s.isOwner ? 'focusmode-stats-owner' : 'focusmode-stats-public';
+  } catch (e) {
+    return 'focusmode-stats-public';
+  }
+}
+
 function getStorage() {
   try {
-    const raw = localStorage.getItem('focusmode-stats');
+    const raw = localStorage.getItem(getKey());
     return raw ? JSON.parse(raw) : {};
   } catch (e) {
     return {};
@@ -9,9 +20,8 @@ function getStorage() {
 
 function saveStorage(obj) {
   try {
-    localStorage.setItem('focusmode-stats', JSON.stringify(obj));
+    localStorage.setItem(getKey(), JSON.stringify(obj));
     try {
-      // notify same-tab listeners that stats changed
       if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
         window.dispatchEvent(new Event('focusmode-stats-updated'));
       }
