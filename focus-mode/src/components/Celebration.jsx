@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 
-export default function Celebration({ message = 'Huyeyi well done', onClose = () => {}, imageSrc = '/confetti.png' }) {
+export default function Celebration({ message = 'Huyeyi well done', onClose = () => {}, imageSrc = null }) {
   useEffect(() => {
     const t = setTimeout(() => onClose(), 4500);
     return () => clearTimeout(t);
@@ -32,7 +32,19 @@ export default function Celebration({ message = 'Huyeyi well done', onClose = ()
             </div>
           </div>
           <div className="mt-2 flex items-center justify-center">
-            <img src={imageSrc} alt="celebrate" className="celebration-img w-40 h-40 object-contain" />
+            {imageSrc ? (
+              <img src={imageSrc} alt="celebrate" className="celebration-img w-40 h-40 object-contain" />
+            ) : (
+              <svg className="celebration-img w-36 h-36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <path d="M10 54c0 0 6-6 12-8l26-8 6 6-44 10z" fill="#F4A261" />
+                <path d="M20 46l30-16 6 6-30 16-6-6z" fill="#E76F51" />
+                <path d="M36 12l4 10 10 4-14-14z" fill="#FFD166" />
+                <path d="M48 8l6 6" stroke="#4D96FF" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="14" cy="14" r="2" fill="#6BCB77" />
+                <circle cx="54" cy="18" r="2" fill="#A76CFF" />
+                <circle cx="38" cy="6" r="2" fill="#FF6B6B" />
+              </svg>
+            )}
           </div>
         </div>
       </div>
