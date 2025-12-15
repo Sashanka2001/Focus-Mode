@@ -1,3 +1,5 @@
+import stats from './stats';
+
 const STORAGE_KEY = "focusmode-screentime";
 const subscribers = new Set();
 let interval = null;
@@ -18,7 +20,6 @@ function notify() {
   for (const cb of subscribers) cb({ ...state });
 }
 
-import stats from './stats';
 
 function flushPending() {
   if (pendingScreenIncrement > 0) {
@@ -75,6 +76,10 @@ if (typeof window !== 'undefined') {
   ['mousemove', 'keydown', 'mousedown', 'touchstart'].forEach((ev) =>
     window.addEventListener(ev, activity, { passive: true }),
   );
+  // flush pending increments when the page unloads
+  window.addEventListener('beforeunload', () => {
+    try { flushPending(); } catch (e) {}
+  });
 }
 
 export function subscribeScreenTime(cb) {
@@ -89,6 +94,7 @@ export function getScreenTime() {
 
 export function resetScreenTime() {
   state.screenTime = 0;
+  pendingScreenIncrement = 0;
   persist();
   notify();
 }
