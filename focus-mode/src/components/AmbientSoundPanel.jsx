@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import ambientState from "../lib/ambientState";
 
 const YOUTUBE_TRACKS = [
   {
@@ -65,18 +66,29 @@ export default function AmbientSoundPanel() {
         })}
       </div>
       <div className="w-full flex justify-center mt-4">
-        {selectedTrack && (
-          <iframe
-            width="100%"
-            height="180"
-            src={options.find((t) => t.id === selectedTrack).url}
-            title="YouTube ambient sound"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="rounded-xl border w-full max-w-xl"
-          ></iframe>
-        )}
+        <div className="w-full max-w-xl">
+          <div className="rounded-xl border bg-slate-50 p-4 text-sm text-slate-600">
+            <p className="mb-2">Selected track: {options.find((t) => t.id === selectedTrack).label}</p>
+            <div className="flex gap-2">
+              <button
+                className="rounded-md bg-brand px-3 py-2 text-white"
+                onClick={() => {
+                  const url = options.find((t) => t.id === selectedTrack).url;
+                  // set ambient player state so iframe remains mounted across navigation
+                  ambientState.setState({ playing: true, url });
+                }}
+              >
+                Play
+              </button>
+              <button
+                className="rounded-md bg-slate-200 px-3 py-2"
+                onClick={() => ambientState.setState({ playing: false })}
+              >
+                Stop
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

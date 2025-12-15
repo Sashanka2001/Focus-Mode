@@ -5,6 +5,7 @@ import FocusSessionPage from "./components/FocusSessionPage";
 import AmbientSoundPage from "./components/AmbientSoundPage";
 import BlockedSitesPage from "./components/BlockedSitesPage";
 import ProductivityReportPage from "./components/ProductivityReportPage";
+import AmbientPlayer from "./components/AmbientPlayer";
 
 function App() {
   const [dark, setDark] = useState(() => {
@@ -25,6 +26,7 @@ function App() {
       <Sidebar dark={dark} />
       <div className="flex-1 pl-64">
         <div className="p-4">
+          <AmbientPlayer />
           <div className="flex justify-end mb-4">
             <button
               onClick={() => setDark(!dark)}
