@@ -17,10 +17,17 @@ function notify() {
   for (const cb of subscribers) cb({ ...state });
 }
 
+import stats from './stats';
+
 function tick() {
   try {
     if (Date.now() - state.lastActive < 60000) {
       state.screenTime = (state.screenTime || 0) + 1;
+      // also increment today's stats screenTime so report stays in sync
+      try {
+        const dateKey = new Date().toLocaleDateString();
+        stats.incrementScreenTime(dateKey, 1);
+      } catch (e) {}
       persist();
       notify();
     }
