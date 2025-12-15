@@ -6,6 +6,7 @@ import AmbientSoundPage from "./components/AmbientSoundPage";
 import BlockedSitesPage from "./components/BlockedSitesPage";
 import ProductivityReportPage from "./components/ProductivityReportPage";
 import AmbientPlayer from "./components/AmbientPlayer";
+import LoginModal from './components/LoginModal';
 
 function App() {
   const [dark, setDark] = useState(() => {
@@ -27,7 +28,8 @@ function App() {
       <div className="flex-1 pl-64">
         <div className="p-4">
           <AmbientPlayer />
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-end items-center mb-4 gap-3">
+            <LoginModal />
             <button
               onClick={() => setDark(!dark)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
